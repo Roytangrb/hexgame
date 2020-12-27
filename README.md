@@ -6,9 +6,9 @@
 * Bazel [C++](https://docs.bazel.build/versions/master/tutorial/cpp.html)
 
 ## Commands
-* Build: `bazel build //main:hexgame`
-* Run: `./bazel-bin/main/hexgame`
-* Deps Graph: `bazel query --notool_deps --noimplicit_deps "deps(//main:hexgame)" --output graph`
+* Build: `bazel build //main:hex`
+* Run: `./bazel-bin/main/hex`
+* Deps Graph: `bazel query --notool_deps --noimplicit_deps "deps(//main:hex)" --output graph`
 
 ## Program does
 1. Draw the board using ASCII symbols and a given size, such as 7 by 7 or 11 by 11
