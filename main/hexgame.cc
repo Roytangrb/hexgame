@@ -1,7 +1,6 @@
 /**
  * Hex game implementation (use g++ -std=c++11 hexgame.cpp)
  * By RT
- * 20th Dec, 2020
  */
 
 #include <iostream>
@@ -14,85 +13,11 @@
 #include <limits>
 #include <algorithm>
 
+#include "Board.h"
+
 using namespace std;
 
 enum class Player: short { B, R };
-enum class SquareVal: short { Empty, B, R };
-
-// Game board
-class Board {
-  private:
-    vector< vector<SquareVal> > board;
-
-  public:
-    // init empty board with size 
-    Board(int n = 11): board(n, vector<SquareVal>(n, SquareVal::Empty)) {}
-
-    friend ostream& operator<<(ostream& out, const Board& b);
-
-    SquareVal getSquare(int r, int c) const {
-      return board[r][c];
-    }
-
-    void setSquare(int i, int j, SquareVal val) {
-      board[i][j] = val;
-    }
-
-    int size() const {
-      return board.size();
-    }
-
-    bool isWithinBoard(int r, int c) const {
-      return r >= 0 && r < board.size()
-          && c >= 0 && c < board.size();
-    }
-
-    bool isAdjacent(int r1, int c1, int r2, int c2) const {
-      // if both sqaures are within board and not the same sqaure
-      if (isWithinBoard(r1, c1) && isWithinBoard(r2, c2) && !(r1 == r2 && c1 == c2)) {
-        // if the euclidean distance is 1 or sqrt(2)
-        int dist_pow = (r1 - r2) * (r1 - r2) + (c1 - c2) * (c1 - c2);
-        if (dist_pow == 1) return true;
-        if (dist_pow == 2 && ((r1 - r2) + (c1 - c2)) == 0) return true;
-      }
-
-      return false;
-    }
-
-    vector< tuple<int, int> > getNeighbors(int r, int c, SquareVal val) const {
-      tuple<int, int> positions[] = {
-        make_tuple(r, c-1),
-        make_tuple(r, c+1),
-        make_tuple(r-1, c),
-        make_tuple(r+1, c),
-        make_tuple(r+1, c-1),
-        make_tuple(r-1, c+1),
-      };
-
-      vector< tuple<int, int> > neighbors;
-      for (auto pos: positions) {
-        auto [r, c] = pos; // C++17 structured binding
-        if (isWithinBoard(r, c) && getSquare(r, c) == val) {
-          neighbors.push_back(pos);
-        }
-      }
-
-      return neighbors;
-    }
-
-    int copy(const Board &b) {
-      int count = 0;
-      for (int r = 0; r < b.size(); r ++) {
-        for (int c = 0; c < b.size(); c ++) {
-          setSquare(r, c, b.getSquare(r, c));
-          if (getSquare(r, c) != SquareVal::Empty) count++;
-        }
-      }
-      return count;
-    }
-
-    ~Board(){}
-};
 
 // Game controller
 class Game {
@@ -284,43 +209,6 @@ class AI {
     ~AI(){}
 };
 
-// print board
-ostream& operator<<(ostream& out, const Board& b) {
-  int row_indent = 1;
-  // print header row
-  out << setw(4) << setfill(' ') << ' ';
-  for (int i = 0; i < b.size(); i ++){
-    out << i << "   ";
-  }
-  out << endl;
-  for (auto const &row: b.board) {
-    // set row number
-    out << setw(2) << setfill(' ') << setiosflags(ios_base::left) << row_indent-1;
-
-    out << setw(row_indent * 2) << setfill(' ') << ' ';
-    int col = 0;
-    for (auto const &val: row) {
-      char label = val == SquareVal::Empty ? '.' : (val == SquareVal::R ? 'X' : 'O');
-      string delimeter = ++col == b.size() ? "" : " - ";
-      out << label << delimeter;
-    }
-    out << endl;
-    // print links to next row
-    if (row_indent < b.size()){
-      out << setw(row_indent * 2 + 2) << setfill(' ') << ' ';
-      out << " \\";
-      for (int i = 1; i < b.size(); i ++){
-        out << " / \\";
-      }
-      out << endl;
-
-      row_indent++;
-    }
-  }
-
-  return out;
-}
-
 ostream& operator<<(ostream& out, const Player& p) {
   char label = p == Player::B ? 'B' : 'R';
   out << label;
@@ -339,7 +227,7 @@ void readint(string title, int &i) {
   cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-int main(void) {
+int main(int argc, char** argv) {
   Game g = Game(11);
   AI ai = AI(g, 10000);
 
