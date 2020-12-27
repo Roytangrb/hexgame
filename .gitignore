@@ -1,0 +1,12 @@
+*~
+bazel-*
+.bazelrc
+.idea
+# Eclipse
+.project
+.classpath
+.settings/
+# vscode
+.vscode/
+# Maven
+target/
