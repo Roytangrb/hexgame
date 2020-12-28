@@ -31,4 +31,5 @@ cc_binary(
     ":hexgame",
     ":hexai",
   ],
+  visibility = ["//test:__pkg__",],
 )
