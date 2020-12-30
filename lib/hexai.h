@@ -9,8 +9,8 @@
 #include <vector>
 #include <tuple>
 
-#include "Board.h"
-#include "Game.h"
+#include "lib/hexboard.h"
+#include "lib/hexgame.h"
 
 using std::vector;
 using std::tuple;

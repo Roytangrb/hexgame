@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Board.h"
+#include "lib/hexboard.h"
 
 using std::ostream;
 using std::vector;

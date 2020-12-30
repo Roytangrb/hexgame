@@ -8,9 +8,9 @@
 #include <random>
 #include <algorithm>
 
-#include "Board.h"
-#include "Game.h"
-#include "AI.h"
+#include "lib/hexboard.h"
+#include "lib/hexgame.h"
+#include "lib/hexai.h"
 
 using std::tuple;
 using std::make_tuple;

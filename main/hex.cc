@@ -7,9 +7,9 @@
 #include <string>
 #include <limits>
 
-#include "Board.h"
-#include "Game.h"
-#include "AI.h"
+#include "lib/hexboard.h"
+#include "lib/hexgame.h"
+#include "lib/hexai.h"
 
 using std::cin;
 using std::cout;

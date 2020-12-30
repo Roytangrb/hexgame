@@ -9,7 +9,7 @@
 #include <vector>
 #include <tuple>
 
-#include "Board.h"
+#include "lib/hexboard.h"
 
 using std::string;
 using std::vector;
