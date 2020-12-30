@@ -11,19 +11,8 @@
 
 #include "lib/hexboard.h"
 
-using std::string;
-using std::vector;
-using std::tuple;
-using std::make_tuple;
-using std::ostream;
-using std::endl;
-using std::setw;
-using std::setfill;
-using std::setiosflags;
-using std::ios_base;
-
 Board::Board(int n):
-  board(n, vector<SquareVal>(n, SquareVal::Empty)) {}
+  board(n, std::vector<SquareVal>(n, SquareVal::Empty)) {}
 
 SquareVal Board::getSquare(int r, int c) const {
   return board[r][c];
@@ -54,17 +43,17 @@ bool Board::isAdjacent(int r1, int c1, int r2, int c2) const {
   return false;
 }
 
-vector< tuple<int, int> > Board::getNeighbors(int r, int c, SquareVal val) const {
-  tuple<int, int> positions[] = {
-    make_tuple(r, c-1),
-    make_tuple(r, c+1),
-    make_tuple(r-1, c),
-    make_tuple(r+1, c),
-    make_tuple(r+1, c-1),
-    make_tuple(r-1, c+1),
+std::vector< std::tuple<int, int> > Board::getNeighbors(int r, int c, SquareVal val) const {
+  std::tuple<int, int> positions[] = {
+    std::make_tuple(r, c-1),
+    std::make_tuple(r, c+1),
+    std::make_tuple(r-1, c),
+    std::make_tuple(r+1, c),
+    std::make_tuple(r+1, c-1),
+    std::make_tuple(r-1, c+1),
   };
 
-  vector< tuple<int, int> > neighbors;
+  std::vector< std::tuple<int, int> > neighbors;
   for (auto pos: positions) {
     auto [r, c] = pos; // C++17 structured binding
     if (isWithinBoard(r, c) && getSquare(r, c) == val) {
@@ -86,7 +75,14 @@ int Board::copy(const Board &b) {
   return count;
 }
 
-ostream& operator<<(ostream& out, const Board& b) {
+std::ostream& operator<<(std::ostream& out, const Board& b) {
+  using std::string;
+  using std::endl;
+  using std::setw;
+  using std::setfill;
+  using std::setiosflags;
+  using std::ios_base;
+
   int row_indent = 1;
   // print header row
   out << setw(4) << setfill(' ') << ' ';

@@ -14,9 +14,8 @@
 using std::cin;
 using std::cout;
 using std::endl;
-using std::string;
 
-void readint(string title, int &i) {
+void readint(std::string title, int &i) {
   cout << title << endl;
   while(!(cin >> i)){
     cin.clear();

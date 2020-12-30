@@ -12,22 +12,17 @@
 #include "lib/hexgame.h"
 #include "lib/hexai.h"
 
-using std::tuple;
-using std::make_tuple;
-using std::default_random_engine;
-using std::shuffle;
-
 AI::AI(const Game& g, int n):
   sim_board(g.board.size()),
   n(n) {}
 
-tuple<int, int> AI::simulate(Game &g) {
+std::tuple<int, int> AI::simulate(Game &g) {
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  default_random_engine gen(seed);
+  std::default_random_engine gen(seed);
 
   int board_size = sim_board.size();
   int n_squares = board_size * board_size;
-  vector<SquareVal> moves(n_squares, SquareVal::Empty);
+  std::vector<SquareVal> moves(n_squares, SquareVal::Empty);
   
   for (int i = 0; i < moves.size(); i++) {
     moves[i] = i % 2 == 0 ? SquareVal::B : SquareVal::R; // player B move first
@@ -35,13 +30,13 @@ tuple<int, int> AI::simulate(Game &g) {
 
   // monte carlo fill board randomly and determine wins
   // increment score of a position if R won in the simulated board
-  vector< vector<int> >scores(board_size, vector<int>(board_size, 0));
+  std::vector< std::vector<int> >scores(board_size, std::vector<int>(board_size, 0));
   for (int i = 0; i < this->n; i ++) {
     // copy existing moves to simulate board
     int n_exists_moves = sim_board.copy(g.board);
 
     // skip existing move count
-    shuffle(moves.begin() + n_exists_moves, moves.end(), gen);
+    std::shuffle(moves.begin() + n_exists_moves, moves.end(), gen);
 
     int i_rand_move = n_exists_moves;
     for (int i = 0; i < moves.size(); i++) {
@@ -88,12 +83,12 @@ tuple<int, int> AI::simulate(Game &g) {
     }
   }
 
-  return make_tuple(max_r, max_c);
+  return std::make_tuple(max_r, max_c);
 }
 
 bool AI::checkRWon(int r, int c, const Board &board) const {
   int n = board.size();
-  vector< vector<bool> >visited(n, vector<bool>(n, false));
+  std::vector< std::vector<bool> >visited(n, std::vector<bool>(n, false));
 
   return traverseNeighbors(board, r, c, visited);
 }
@@ -102,13 +97,13 @@ bool AI::traverseNeighbors(
   const Board &board,
   int r,
   int c,
-  vector< vector<bool> > &visited
+  std::vector< std::vector<bool> > &visited
   ) const
 {
   visited[r][c] = true;
   if (c == board.size()-1) return true;
 
-  vector< tuple<int, int> > neighbors = board.getNeighbors(r, c, SquareVal::R);
+  std::vector< std::tuple<int, int> > neighbors = board.getNeighbors(r, c, SquareVal::R);
   for (auto neighbor: neighbors){
     auto [nr, nc] = neighbor;
     if (!visited[nr][nc]) {

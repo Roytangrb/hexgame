@@ -12,9 +12,6 @@
 
 using std::cout;
 using std::endl;
-using std::ostream;
-using std::vector;
-using std::tuple;
 
 // new game starts with player B's turn
 Game::Game(int n):
@@ -47,9 +44,9 @@ bool Game::validate(int r, int c) const {
 void Game::checkWon(int r, int c, SquareVal val) {
   int n = board.size();
   // prevent recursion loop, visit once
-  vector< vector<bool> >visited(n, vector<bool>(n, false));
+  std::vector< std::vector<bool> >visited(n, std::vector<bool>(n, false));
   // memo if four boundary is reached
-  vector<bool>memo(4, false); // 0: N, 1: S, 2: W, 3: E
+  std::vector<bool>memo(4, false); // 0: N, 1: S, 2: W, 3: E
 
   traverseNeighbors(r, c, val, visited, memo);
 
@@ -66,8 +63,8 @@ void Game::traverseNeighbors(
   int r,
   int c,
   SquareVal val,
-  vector< vector<bool> > &visited,
-  vector<bool> &memo) const
+  std::vector< std::vector<bool> > &visited,
+  std::vector<bool> &memo) const
 {
   visited[r][c] = true;
   if (r == 0) memo[0] = true;
@@ -75,7 +72,7 @@ void Game::traverseNeighbors(
   if (c == 0) memo[2] = true;
   if (c == board.size()-1) memo[3] = true;
 
-  vector< tuple<int, int> > neighbors = board.getNeighbors(r, c, val);
+  std::vector< std::tuple<int, int> > neighbors = board.getNeighbors(r, c, val);
   for (auto neighbor: neighbors){
     auto [nr, nc] = neighbor;
     if (!visited[nr][nc]) {
@@ -96,7 +93,7 @@ Player Game::getPlayer() const {
   return player;
 }
 
-ostream& operator<<(ostream& out, const Player& p) {
+std::ostream& operator<<(std::ostream& out, const Player& p) {
   char label = p == Player::B ? 'B' : 'R';
   out << label;
 
