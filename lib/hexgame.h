@@ -11,12 +11,9 @@
 
 #include "lib/hexboard.h"
 
-using std::ostream;
-using std::vector;
-
 enum class Player: short { B, R };
 
-ostream& operator<<(ostream& out, const Player& p);
+std::ostream& operator<<(std::ostream& out, const Player& p);
 
 /**
  * @property {Player} player current to make move
@@ -54,8 +51,8 @@ class Game {
       int r,
       int c,
       SquareVal val,
-      vector< vector<bool> > &visited,
-      vector<bool> &memo
+      std::vector< std::vector<bool> > &visited,
+      std::vector<bool> &memo
     ) const;
 
     bool isWon() const;

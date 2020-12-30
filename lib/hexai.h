@@ -12,9 +12,6 @@
 #include "lib/hexboard.h"
 #include "lib/hexgame.h"
 
-using std::vector;
-using std::tuple;
-
 /**
  * @property {int} n number of monte carlo simulation before each move
  * @property {Board} sim_board board for simulation
@@ -29,7 +26,7 @@ class AI {
     /**
      * @return {tuple<int, int>} sugguested move of (r, c)
      */
-    tuple<int, int> simulate(Game &g);
+    std::tuple<int, int> simulate(Game &g);
 
     bool checkRWon(int r, int c, const Board &board) const;
 
@@ -37,7 +34,7 @@ class AI {
       const Board &board,
       int r,
       int c,
-      vector< vector<bool> > &visited
+      std::vector< std::vector<bool> > &visited
     ) const;
 
     ~AI(){}
