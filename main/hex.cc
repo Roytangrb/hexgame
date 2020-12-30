@@ -7,7 +7,6 @@
 #include <string>
 #include <limits>
 
-#include "lib/hexboard.h"
 #include "lib/hexgame.h"
 #include "lib/hexai.h"
 

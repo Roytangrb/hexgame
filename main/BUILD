@@ -8,7 +8,6 @@ cc_binary(
   name = "hex",
   srcs = ["hex.cc"],
   deps = [
-    "//lib:hexboard",
     "//lib:hexgame",
     "//lib:hexai",
   ],
