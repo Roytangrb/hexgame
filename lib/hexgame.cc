@@ -10,8 +10,7 @@
 #include "lib/hexboard.h"
 #include "lib/hexgame.h"
 
-using std::cout;
-using std::endl;
+namespace hexgame {
 
 // new game starts with player B's turn
 Game::Game(int n):
@@ -19,7 +18,11 @@ Game::Game(int n):
 
 bool Game::move(int r, int c) {
   if (validate(r, c)) {
-    SquareVal val = player == Player::B ? SquareVal::B : SquareVal::R;
+    hexboard::SquareVal val = 
+      player == Player::B ? 
+        hexboard::SquareVal::B :
+        hexboard::SquareVal::R ;
+
     board.setSquare(r, c, val);
     checkWon(r, c, val);
 
@@ -34,14 +37,14 @@ bool Game::move(int r, int c) {
 
 bool Game::validate(int r, int c) const {
   return board.isWithinBoard(r, c)
-      && board.getSquare(r, c) == SquareVal::Empty;
+      && board.getSquare(r, c) == hexboard::SquareVal::Empty;
 }
 
 /**
  * if game is won, the curr move is the last move
  * check the connected graph of last move has a path
  */
-void Game::checkWon(int r, int c, SquareVal val) {
+void Game::checkWon(int r, int c, hexboard::SquareVal val) {
   int n = board.size();
   // prevent recursion loop, visit once
   std::vector< std::vector<bool> >visited(n, std::vector<bool>(n, false));
@@ -50,11 +53,11 @@ void Game::checkWon(int r, int c, SquareVal val) {
 
   traverseNeighbors(r, c, val, visited, memo);
 
-  if (memo[0] && memo[1] && val == SquareVal::B) {
-    cout << "Player B has won" << endl;
+  if (memo[0] && memo[1] && val == hexboard::SquareVal::B) {
+    std::cout << "Player B has won" << std::endl;
     won = true;
-  } else if (memo[2] && memo[3] && val == SquareVal::R) {
-    cout << "Player R has won" << endl;
+  } else if (memo[2] && memo[3] && val == hexboard::SquareVal::R) {
+    std::cout << "Player R has won" << std::endl;
     won = true;
   }
 }
@@ -62,7 +65,7 @@ void Game::checkWon(int r, int c, SquareVal val) {
 void Game::traverseNeighbors(
   int r,
   int c,
-  SquareVal val,
+  hexboard::SquareVal val,
   std::vector< std::vector<bool> > &visited,
   std::vector<bool> &memo) const
 {
@@ -86,7 +89,7 @@ bool Game::isWon() const {
 }
 
 void Game::printBoard() const {
-  cout << board;
+  std::cout << board;
 }
 
 Player Game::getPlayer() const {
@@ -99,3 +102,5 @@ std::ostream& operator<<(std::ostream& out, const Player& p) {
 
   return out;
 }
+
+} // namespace hexgame

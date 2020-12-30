@@ -10,6 +10,8 @@
 #include <vector>
 #include <tuple>
 
+namespace hexboard {
+
 enum class SquareVal: short { Empty, B, R };
 
 class Board {
@@ -54,5 +56,7 @@ class Board {
 
     ~Board(){}
 };
+
+} // namespace hexboard
 
 #endif

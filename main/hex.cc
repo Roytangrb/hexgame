@@ -11,11 +11,12 @@
 #include "lib/hexgame.h"
 #include "lib/hexai.h"
 
-using std::cin;
 using std::cout;
 using std::endl;
 
 void readint(std::string title, int &i) {
+  using std::cin;
+
   cout << title << endl;
   while(!(cin >> i)){
     cin.clear();
@@ -27,16 +28,16 @@ void readint(std::string title, int &i) {
 }
 
 int main(int argc, char** argv) {
-  Game g = Game(11);
-  AI ai = AI(g, 10000);
+  hexgame::Game g = hexgame::Game(11);
+  hexai::AI ai = hexai::AI(g, 10000);
 
   cout << "Game start - Player B place 'O' to connect North & South sides: " << endl;
   g.printBoard();
   while (!g.isWon()) {
-    Player p = g.getPlayer();
+    hexgame::Player p = g.getPlayer();
     cout << "Player " << p << "'s turn: " << endl;
 
-    if (p == Player::B) {
+    if (p == hexgame::Player::B) {
       int r, c;
       readint("Enter row: ", r);
       readint("Enter col: ", c);

@@ -12,20 +12,25 @@
 #include "lib/hexgame.h"
 #include "lib/hexai.h"
 
-AI::AI(const Game& g, int n):
+namespace hexai {
+
+AI::AI(const hexgame::Game& g, int n):
   sim_board(g.board.size()),
   n(n) {}
 
-std::tuple<int, int> AI::simulate(Game &g) {
+std::tuple<int, int> AI::simulate(hexgame::Game &g) {
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   std::default_random_engine gen(seed);
 
   int board_size = sim_board.size();
   int n_squares = board_size * board_size;
-  std::vector<SquareVal> moves(n_squares, SquareVal::Empty);
+  std::vector<hexboard::SquareVal> moves(n_squares, hexboard::SquareVal::Empty);
   
   for (int i = 0; i < moves.size(); i++) {
-    moves[i] = i % 2 == 0 ? SquareVal::B : SquareVal::R; // player B move first
+    // player B move first
+    moves[i] = i % 2 == 0 ?
+      hexboard::SquareVal::B :
+      hexboard::SquareVal::R ;
   }
 
   // monte carlo fill board randomly and determine wins
@@ -41,7 +46,7 @@ std::tuple<int, int> AI::simulate(Game &g) {
     int i_rand_move = n_exists_moves;
     for (int i = 0; i < moves.size(); i++) {
       int r = i/board_size, c = i%board_size;
-      if (sim_board.getSquare(r, c) == SquareVal::Empty){
+      if (sim_board.getSquare(r, c) == hexboard::SquareVal::Empty){
         sim_board.setSquare(r, c, moves[i_rand_move++]);
       }
     }
@@ -49,7 +54,7 @@ std::tuple<int, int> AI::simulate(Game &g) {
     // check won of a completely filled board
     bool r_won = false;
     for (int r = 0; r < board_size; r++){
-      if (sim_board.getSquare(r, 0) == SquareVal::R){
+      if (sim_board.getSquare(r, 0) == hexboard::SquareVal::R){
         r_won = checkRWon(r, 0, sim_board);
         if (r_won) break;
       }
@@ -58,7 +63,7 @@ std::tuple<int, int> AI::simulate(Game &g) {
     if (r_won) {
       for (int r = 0; r < board_size; r++){
         for (int c = 0; c < board_size; c++){
-          if (sim_board.getSquare(r, c) == SquareVal::R){
+          if (sim_board.getSquare(r, c) == hexboard::SquareVal::R){
             scores[r][c]++;
           }
         }
@@ -71,7 +76,7 @@ std::tuple<int, int> AI::simulate(Game &g) {
   for (int r = 0; r < board_size; r++){
     for (int c = 0; c < board_size; c++){
       // exclude already occupied squares
-      if (g.board.getSquare(r, c) != SquareVal::Empty){
+      if (g.board.getSquare(r, c) != hexboard::SquareVal::Empty){
         scores[r][c] = -1;
       }
       //memo position of max score move
@@ -86,7 +91,7 @@ std::tuple<int, int> AI::simulate(Game &g) {
   return std::make_tuple(max_r, max_c);
 }
 
-bool AI::checkRWon(int r, int c, const Board &board) const {
+bool AI::checkRWon(int r, int c, const hexboard::Board &board) const {
   int n = board.size();
   std::vector< std::vector<bool> >visited(n, std::vector<bool>(n, false));
 
@@ -94,7 +99,7 @@ bool AI::checkRWon(int r, int c, const Board &board) const {
 }
 
 bool AI::traverseNeighbors(
-  const Board &board,
+  const hexboard::Board &board,
   int r,
   int c,
   std::vector< std::vector<bool> > &visited
@@ -103,7 +108,7 @@ bool AI::traverseNeighbors(
   visited[r][c] = true;
   if (c == board.size()-1) return true;
 
-  std::vector< std::tuple<int, int> > neighbors = board.getNeighbors(r, c, SquareVal::R);
+  std::vector< std::tuple<int, int> > neighbors = board.getNeighbors(r, c, hexboard::SquareVal::R);
   for (auto neighbor: neighbors){
     auto [nr, nc] = neighbor;
     if (!visited[nr][nc]) {
@@ -112,3 +117,5 @@ bool AI::traverseNeighbors(
   }
   return false;
 }
+
+} // namespace hexai

@@ -11,6 +11,8 @@
 
 #include "lib/hexboard.h"
 
+namespace hexboard {
+
 Board::Board(int n):
   board(n, std::vector<SquareVal>(n, SquareVal::Empty)) {}
 
@@ -117,3 +119,5 @@ std::ostream& operator<<(std::ostream& out, const Board& b) {
 
   return out;
 }
+
+} // namespace hexboard

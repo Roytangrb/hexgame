@@ -11,6 +11,13 @@
 
 #include "lib/hexboard.h"
 
+// forward delaration of namespace friend
+namespace hexai {
+  class AI;
+}
+
+namespace hexgame {
+
 enum class Player: short { B, R };
 
 std::ostream& operator<<(std::ostream& out, const Player& p);
@@ -23,7 +30,7 @@ std::ostream& operator<<(std::ostream& out, const Player& p);
 class Game {
   private:
     Player player;
-    Board board;
+    hexboard::Board board;
     bool won;
 
   public:
@@ -41,7 +48,7 @@ class Game {
 
     bool validate(int r, int c) const;
 
-    void checkWon(int r, int c, SquareVal val);
+    void checkWon(int r, int c, hexboard::SquareVal val);
 
     /**
      * traverse the board recursively starting at(r, c)
@@ -50,7 +57,7 @@ class Game {
     void traverseNeighbors(
       int r,
       int c,
-      SquareVal val,
+      hexboard::SquareVal val,
       std::vector< std::vector<bool> > &visited,
       std::vector<bool> &memo
     ) const;
@@ -61,9 +68,11 @@ class Game {
 
     Player getPlayer() const;
 
-    friend class AI;
+    friend class hexai::AI;
 
     ~Game(){}
 };
+
+} // namespace hexgeame
 
 #endif
